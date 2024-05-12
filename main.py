@@ -234,7 +234,7 @@ class CustomerService:
                        select * from customer
                        where Username = ?
                        """,
-            (custom_name),
+            (custom_name), 
         )
         return cursor.fetchall()
 
