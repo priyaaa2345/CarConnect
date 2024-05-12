@@ -133,7 +133,50 @@ class Vehicle:
 
 
 def Vehicle_menu():
-    pass
+    vehicle_service=VehicleService()
+    while True:
+        print("""Enter your choice:
+              1. Get details by Id
+              2. Get available vehicles
+              3. Add vehicle
+              4. Update Vehicle
+              5. Remove vehicle
+              6. Back to main menu
+              """)
+        choice=int(input("enter your choice: "))
+        if choice == 1:
+            vehi_id= int(input("Enter the vehicle id to get details: "))
+            detail=vehicle_service.GetVehicleById(vehi_id)
+            print("The vehicle details are: ",detail)
+        elif choice==2:
+            avail=vehicle_service.GetAvailableVehicles()
+            print("the available vehicles are: ",avail)
+        elif choice==3:
+            ve_id=int(input("Enter the vehicelId "))
+            modl=input("Enter the model for the vehicle: ")
+            make=input("enter the brand who made the vehicle: ")
+            year=int(input("Enter the year of manufacturing: "))
+            color=input("Enter the color of vehicel ")
+            Register_num= int(input("Give the unique registration number: "))
+            Availabi=int(input("Give the availability for the vehicle(1/0): "))
+            Daily_rate=int(input("enter the daily rate for vehicle: "))
+            vehicle_service.AddVehicle(ve_id,modl,make,year,color,Register_num,Availabi,Daily_rate)
+            print("Vehicle added ✅ ")
+        elif choice==4:   #error
+            dail_rate=int(input("Enter the dailyrate to update: "))
+            availab=int(input("Enter the data to update availability(1/0): "))
+            veh_id=int(input("enter the vehicle id to change the data: "))
+            vehicle_service.UpdateVehicle(dail_rate,availab,veh_id)
+            print("updation done!")
+
+        elif choice==5: #error
+            v_id=int(input("enter the vehicle id to delete from log: "))
+            vehicle_service.RemoveVehicle(v_id)
+            print("Removed succesfully..")
+
+        elif choice==6:
+            break
+            
 
 
 class Reservation:
@@ -155,19 +198,40 @@ class Reservation:
         self.TotalCost = TotalCost
         self.Status = Status
 
-    def CalculateTotalCost(self, ReservationID):
-        cursor.execute(
-            """
-                            select totalcost from Reservation
-                            where reservationid=?
-                    """,
-            (ReservationID),
-        )
-        return cursor.fetchall()
-
-
 def Reservation_menu():
-    pass
+    reservation_service=ReservationService()
+    while True:
+        print("""Enter an option
+              1. Get details by id
+              2. Get details by customer id
+              3. Create a new Reservation
+              4. Update Reservation
+              5. Cancel Reservation
+              6. Calculate total cost
+              7. Back to  main menu
+              """)
+        choice= int(input("enter an option: "))
+        if choice==1:
+            res_id=int(input("Enter the reservation id to get the total details: "))
+            detail= reservation_service.GetReservationById(res_id)
+            print("the details are: ",detail)
+        elif choice==2:
+            cus_id=int(input("enter the customer id to get the total details: "))
+            details=reservation_service.GetReservationsByCustomerId(cus_id)
+            print("the details area: ",details)
+        elif choice==3:
+            re_id=int(input("Enter the reservation id: "))
+            cu_id=int(input("Enter the customer id : "))
+            ve_id=int(input("Enter the vehicle id pls: "))
+            start_date=input("give the starting date of reservation: ")
+            end_date=input("Pls enter the end date of reservation: ")
+            tot_cost=int(input("Enter the total cost for reservation: "))
+            status=input("Enter the status(completed/pending): ")
+            reservation_service.CreateReservation(re_id,cu_id,ve_id,start_date,end_date,tot_cost,status)
+            print("reservation done")
+
+        elif choice==4:
+            pass
 
 
 class Admin:
@@ -286,16 +350,17 @@ select* from customer
 
 class VehicleService:
 
-    def GetVehicleById(self, VehicleID):
+    def GetVehicleById(self, vehi_id):
         cursor.execute(
             """
                             select * from Vehicle
                             where VehicleID= ?
                        """,
-            (VehicleID),
+            (vehi_id),
         )
-
-    def GetAvailableVehicles():
+        return cursor.fetchall()
+    
+    def GetAvailableVehicles(self):
         cursor.execute(
             """                      
                         select * from Vehicle
@@ -303,63 +368,73 @@ class VehicleService:
 
                        """,
         )
+        return cursor.fetchall()
 
     def AddVehicle(
         self,
-        VehicleID,
-        Model,
-        Make,
-        Year,
-        Color,
-        RegistrationNumber,
-        Availability,
-        DailyRate,
+        ve_id,modl,make,year,color,Register_num,Availabi,Daily_rate
     ):
         cursor.execute(
             """
 insert into Vehicle values(?,?,?,?,?,?,?,?)
                        """,
             (
-                VehicleID,
-                Model,
-                Make,
-                Year,
-                Color,
-                RegistrationNumber,
-                Availability,
-                DailyRate,
+                ve_id,modl,make,year,color,Register_num,Availabi,Daily_rate
             ),
         )
+        conn.commit()
 
-    def UpdateVehicle(self, DailyRate, Availability, VehicleID):
+    def UpdateVehicle(self,dail_rate,availab,veh_id):
         cursor.execute(
             """
-                       update vehicle
-                       set DailyRate= ?
-                       Availability=?
+                       update Vehicle
+                       set DailyRate= ?,
+                       Availability=?,
                        where VehicleID=?
                        """,
-            (DailyRate, Availability, VehicleID),
+            (dail_rate,availab,veh_id),
         )
+        conn.commit()
 
-    def RemoveVehicle(self, VehicleID):
+    def RemoveVehicle(self, v_id):
         cursor.execute(
-            """delete from vehicle 
+            """delete from Vehicle 
                        where vehicleID=?
                        """,
-            (VehicleID),
+            (v_id),
         )
-
+        conn.commit()
 
 class ReservationService:
-    def GetReservationById():
-        pass
+    def CalculateTotalCost(self, ReservationID):
+        cursor.execute(
+            """
+                            select totalcost from Reservation
+                            where reservationid=?
+                    """,
+            (ReservationID),
+        )
+        return cursor.fetchall()
 
-    def GetReservationsByCustomerId():
-        pass
+    def GetReservationById(self,res_id):
+        cursor.execute("""
+                       select * from Reservation
+                       where Reservationid= ?
+                       """,(res_id))
+        return cursor.fetchall()
 
-    def CreateReservation():
-        pass
+    def GetReservationsByCustomerId(self,cus_id):
+        cursor.execute("""
+                       select * from Reservation
+                       where CustomerID=?
+                       
+                       """,(cus_id))
+        return cursor.fetchall()
+
+    def CreateReservation(self,re_id,cu_id,ve_id,start_date,end_date,tot_cost,status):
+        cursor.execute("""insert into Reservation values(?,?,?,?,?,?,?)
+                       """,(re_id,cu_id,ve_id,start_date,end_date,tot_cost,status))
+        conn.commit()
 
     def UpdateReservation():
         pass
