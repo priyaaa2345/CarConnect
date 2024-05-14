@@ -1,20 +1,23 @@
 from util.DBConn import DBConnection
+from exception.Exceptions import AuthenticationException
 
 class CustomerService(DBConnection):
 
     def Authenticate(self, customerid, password):
-        self.cursor.execute(
+        try:
+            self.cursor.execute(
             """
                         select customerid,password from customer
                         where customerid=? and password=?
                        """,
             (customerid, password),
         )
-        result = self.cursor.fetchone()
-        if result:
-            return True
-        else:
-            return False
+            result = self.cursor.fetchone()
+            if not result:
+                raise AuthenticationException()
+        except AuthenticationException as e:
+            print(e)
+        return result
 
     def GetCustomerById(self, custom_id):
         self.cursor.execute(

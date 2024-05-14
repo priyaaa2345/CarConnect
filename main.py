@@ -37,10 +37,9 @@ class MainMenu:
             if choice == 1:
                 customerid = int(input("enter the customer id : "))
                 password = input("enter the password: ")
-                if self.customer_service.Authenticate(customerid, password):
-                    print("Authentication successful.")
-                else:
-                    print("Authentication failed. Incorrect customer ID or password.")
+                self.customer_service.Authenticate(customerid, password)
+                    
+                
             elif choice == 2:
                 custom_id = int(input("Enter the customer id to get the details: "))
                 get_detail_by_id = self.customer_service.GetCustomerById(custom_id)

@@ -1,5 +1,5 @@
 from util.DBConn import DBConnection
-
+from exception.Exceptions import ReservationException
 class ReservationService(DBConnection):
     def CalculateTotalCost(self, ReservationID):
         self.cursor.execute(
@@ -27,9 +27,16 @@ class ReservationService(DBConnection):
         return self.cursor.fetchall()
 
     def CreateReservation(self,re_id,cu_id,ve_id,start_date,end_date,tot_cost,status):
-        self.cursor.execute("""insert into Reservation values(?,?,?,?,?,?,?)
+        try:  #try again
+            self.cursor.execute("""insert into Reservation values(?,?,?,?,?,?,?)
                        """,(re_id,cu_id,ve_id,start_date,end_date,tot_cost,status))
-        self.conn.commit()
+            # self.conn.commit()
+            result = self.cursor.execute("select ReservationId from Reservation where ReservationID=?",(re_id))
+            if not result:
+                raise ReservationException()
+        except ReservationException as e:
+            print(e)
+        return result
 
     def UpdateReservation(self,cust_id,veh_id,stats):
         self.cursor.execute("""
