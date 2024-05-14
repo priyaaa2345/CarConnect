@@ -231,7 +231,24 @@ def Reservation_menu():
             print("reservation done")
 
         elif choice==4:
-            pass
+            cust_id=int(input("Enter the customer id : "))
+            veh_id=int(input("Enter the vehicle id pls: "))
+            stats=input("Enter the status(completed/pending): ")
+            reservation_service.UpdateReservation(cust_id,veh_id,stats)
+            print("updated")
+
+        elif choice==5:
+            resv_id=int(input("Enter the reservation id: "))
+            reservation_service.CancelReservation(resv_id)
+            print("deleted!!")
+
+        elif choice == 6:
+            resvv_id=int(input("Enter the reservation id: "))
+            toto=reservation_service.CalculateTotalCost(resvv_id)
+            print("the total cost is : ",toto)
+
+        elif choice == 7:
+            break
 
 
 class Admin:
@@ -263,7 +280,37 @@ def Authenticate(self, password):
 
 
 def Admin_menu():
-    pass
+    admin_service=AdminService()
+    while True:
+        print("""
+                1. GetAdminById
+                2. GetAdminByUsername
+                3. RegisterAdmin
+                4. UpdateAdmin
+                5. DeleteAdmin
+              """
+              )
+        choice=int(input("Enter a choice: "))
+        if choice == 1:
+            ad_id=int(input("Enter the admin id to get details: "))
+            result=admin_service.GetAdminById(ad_id)
+            print("The details are: ",result)
+
+        elif choice==2:
+            ad_name=input("Enter the username to get the details: ")
+            detail=admin_service.GetAdminByUsername(ad_name)
+            print("the details are: ",detail)
+
+        elif choice==3:
+            pass
+        elif choice ==4:
+            pass
+
+        elif choice ==5:
+            adm_id=int(input("Enter admin id to delete their detail: "))
+            admin_service.DeleteAdmin(adm_id)
+            print("deleted successfully!!")
+    
 
 
 class CustomerService:
@@ -436,28 +483,60 @@ class ReservationService:
                        """,(re_id,cu_id,ve_id,start_date,end_date,tot_cost,status))
         conn.commit()
 
-    def UpdateReservation():
-        pass
+    def UpdateReservation(self,cust_id,veh_id,stats):
+        cursor.execute("""
+update Reservation
+                       set CustomerID=?,
+                       VehicleID=?,
+                       Status=?
+                       where ReservaionID=?
+                       """,(cust_id,veh_id,stats))
+        conn.commit()
 
-    def CancelReservation():
-        pass
+    def CancelReservation(self,resv_id):
+        cursor.execute("""
+delete from Reservation
+                       where ReservationID=?
+                       """,(resv_id))
+        
+    def CalculateTotalCost(self,resvv_id):
+        cursor.execute("""
+select sum(TotalAmount) from Reservation
+                           where ReservationID=?
+                           """,(resvv_id))
+        return cursor.fetchall()
 
 
 class AdminService:
     def GetAdminById():
-        pass
+        cursor.execute("""
+select * from Admin
+                       where AdminID=?
+                       """,())
+        return cursor.fetchall()
 
     def GetAdminByUsername():
-        pass
+        cursor.execute("""select * from Admin
+                       where Username=?""",())
+        return cursor.fetchall()
 
     def RegisterAdmin():
-        pass
+        cursor.execute("""
+insert into Admin values(?,?,?,?,?,?,?,?,?)
+                       """,())
+        conn.commit()
+        
 
     def UpdateAdmin():
-        pass
+        conn.commit()
+        
 
     def DeleteAdmin():
-        pass
+        cursor.execute("""
+                       delete from Admin 
+                       where AdminID=?
+                       """,())
+        conn.commit()
 
 
 # class DatabaseContext:
