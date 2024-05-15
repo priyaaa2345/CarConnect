@@ -1,4 +1,5 @@
 from exception.admin_not_found_exception import AdminNotFoundException
+from exception.database_connection_exception import DatabaseConnectionException
 from util.DBConn import DBConnection
 
 class AdminService(DBConnection):
@@ -53,5 +54,9 @@ update Admin
         self.conn.commit()
 
     def view_admin(self):
-        self.cursor.execute("""select * from Admin""")
-        return self.cursor.fetchall()
+        try:
+            self.cursor.execute("""select * from Admin""")
+            return self.cursor.fetchall()
+        except Exception as e:
+            raise DatabaseConnectionException() 
+
