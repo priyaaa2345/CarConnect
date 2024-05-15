@@ -1,5 +1,6 @@
+from exception.invalid_input_exception import InvalidInputException
 from util.DBConn import DBConnection
-from exception.Exceptions import AuthenticationException
+from exception.authentication_exception import AuthenticationException
 
 class CustomerService(DBConnection):
 
@@ -42,6 +43,10 @@ class CustomerService(DBConnection):
     def RegisterCustomer(
         self, cus_id, Firs_name, las_name, mail, Phon, addr, Usernam, passwo, reg_date
     ):
+        if not self.is_valid_phone(Phon):
+            raise InvalidInputException()
+    
+
         self.cursor.execute(
             """
                             insert into Customer values(
@@ -51,7 +56,8 @@ class CustomerService(DBConnection):
             (cus_id, Firs_name, las_name, mail, Phon, addr, Usernam, passwo, reg_date),
         )
         self.conn.commit()
-
+    def is_valid_phone(self, phone):
+        return len(str(phone)) == 10 and str(phone).isdigit()
     def UpdateCustomer(self, phoon, addre, emai, cust_id):  # error
         self.cursor.execute(
             """

@@ -1,13 +1,21 @@
+from exception.admin_not_found_exception import AdminNotFoundException
 from util.DBConn import DBConnection
 
 class AdminService(DBConnection):
 
     def GetAdminById(self,ad_id):
-        self.cursor.execute("""
+        try:
+            self.cursor.execute("""
 select * from Admin
                        where AdminID=?
                        """,(ad_id))
-        return self.cursor.fetchall()
+            details= self.cursor.fetchall()
+            if len(details)==0:
+                raise AdminNotFoundException()
+            else:
+                print(details)
+        except Exception as e:
+            print("oops an error..",e)
 
     def GetAdminByUsername(self,ad_name):
         self.cursor.execute("""select * from Admin

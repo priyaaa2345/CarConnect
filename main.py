@@ -158,7 +158,7 @@ class MainMenu:
                 end_date=input("Pls enter the end date of reservation: ")
                 tot_cost=int(input("Enter the total cost for reservation: "))
                 status=input("Enter the status(completed/pending): ")
-                self.reservation_service.CreateReservation(re_id,cu_id,ve_id,start_date,end_date,tot_cost,status)
+                self.reservation_service.create_reservation(re_id,cu_id,ve_id,start_date,end_date,tot_cost,status)
                 print("reservation done")
 
             elif choice==4:

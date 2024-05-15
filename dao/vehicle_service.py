@@ -1,16 +1,24 @@
+from exception.vehicle_not_exception import VehicleNotFoundException
 from util.DBConn import DBConnection
 
 class VehicleService(DBConnection):
 
     def GetVehicleById(self, vehi_id):
-        self.cursor.execute(
+        try:
+            self.cursor.execute(
             """
                             select * from Vehicle
                             where VehicleID= ?
                        """,
             (vehi_id),
-        )
-        return self.cursor.fetchall()
+            )
+            details=self.cursor.fetchall()
+            if len(details)==0:
+                raise VehicleNotFoundException()        # whenever we raise error it goes to except blk     
+            else:          
+                print(details)
+        except Exception as e:
+            print("oops an error..",e)
     
     def GetAvailableVehicles(self):
         self.cursor.execute(
