@@ -34,7 +34,8 @@ class VehicleService(DBConnection):
         self,
         ve_id,modl,make,year,color,Register_num,Availabi,Daily_rate
     ):
-        self.cursor.execute(
+        try:
+            self.cursor.execute(
             """
 insert into Vehicle values(?,?,?,?,?,?,?,?)
                        """,
@@ -42,8 +43,11 @@ insert into Vehicle values(?,?,?,?,?,?,?,?)
                 ve_id,modl,make,year,color,Register_num,Availabi,Daily_rate
             ),
         )
-        self.conn.commit()
-
+            self.conn.commit()
+            return True 
+        except Exception as e:
+            print(f"Error adding vehicle: {e}")
+            return False 
     def UpdateVehicle(self,dail_rate,availab,veh_id):
         self.cursor.execute(
             """
@@ -58,9 +62,19 @@ insert into Vehicle values(?,?,?,?,?,?,?,?)
 
     def RemoveVehicle(self, v_id):
         self.cursor.execute(
+            """delete from Reservation 
+                       where vehicleID=?
+                       """,
+            (v_id),
+        )
+        self.cursor.execute(
             """delete from Vehicle 
                        where vehicleID=?
                        """,
             (v_id),
         )
         self.conn.commit()
+
+    def GetAllVehicles(self):
+        self.cursor.execute("select * from Vehicle")
+        return self.cursor.fetchall()

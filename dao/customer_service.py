@@ -16,6 +16,8 @@ class CustomerService(DBConnection):
             result = self.cursor.fetchone()
             if not result:
                 raise AuthenticationException()
+            print("Authentication successful!!")
+
         except AuthenticationException as e:
             print(e)
         return result
@@ -43,8 +45,8 @@ class CustomerService(DBConnection):
     def RegisterCustomer(
         self, cus_id, Firs_name, las_name, mail, Phon, addr, Usernam, passwo, reg_date
     ):
-        if not self.is_valid_phone(Phon):
-            raise InvalidInputException()
+        # if not self.is_valid_phone(Phon):
+        #     raise InvalidInputException()
     
 
         self.cursor.execute(
@@ -89,3 +91,7 @@ select* from customer
         )
         result = self.cursor.fetchall()
         return result
+    
+
+
+    

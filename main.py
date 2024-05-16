@@ -38,6 +38,7 @@ class MainMenu:
                 customerid = int(input("enter the customer id : "))
                 password = input("enter the password: ")
                 self.customer_service.Authenticate(customerid, password)
+                
                     
                 
             elif choice == 2:
@@ -91,7 +92,8 @@ class MainMenu:
                 3. Add vehicle
                 4. Update Vehicle
                 5. Remove vehicle
-                6. Back to main menu
+                6. View All
+                7. Back to main menu
                 """)
             choice=int(input("enter your choice: "))
             if choice == 1:
@@ -119,12 +121,16 @@ class MainMenu:
                 self.vehicle_service.UpdateVehicle(dail_rate,availab,veh_id)
                 print("updation done!")
 
-            elif choice==5: #error
+            elif choice==5: 
                 v_id=int(input("enter the vehicle id to delete from log: "))
                 self.vehicle_service.RemoveVehicle(v_id)
                 print("Removed succesfully..")
 
             elif choice==6:
+                all_vehicle=self.vehicle_service.GetAllVehicles()
+                print(" ",all_vehicle)
+
+            elif choice==7:
                 break
                 
 
