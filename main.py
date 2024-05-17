@@ -206,7 +206,8 @@ class MainMenu:
                     4. UpdateAdmin
                     5. DeleteAdmin
                     6. View all
-                    7. Back to main menu
+                    7. Authentication
+                    8. Back to main menu
                 """
                 )
             choice=int(input("Enter a choice: "))
@@ -252,7 +253,13 @@ class MainMenu:
                 alll=self.admin_service.view_admin()
                 print("the details area: ", alll)
 
-            elif choice==7:
+            elif choice ==7:
+                admin_id = int(input("enter the Admin id : "))
+                password = input("enter the password: ")
+                self.admin_service.Authentication(admin_id, password)
+                
+
+            elif choice==8:
                 break
     
 

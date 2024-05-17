@@ -1,4 +1,5 @@
 from exception.admin_not_found_exception import AdminNotFoundException
+from exception.authentication_exception import AuthenticationException
 from exception.database_connection_exception import DatabaseConnectionException
 from util.DBConn import DBConnection
 
@@ -59,4 +60,23 @@ update Admin
             return self.cursor.fetchall()
         except Exception as e:
             raise DatabaseConnectionException() 
+        
+    def Authentication(self,admin_id,password):
+        try:
+            self.cursor.execute(
+            """
+                        select AdminID,Password from Admin
+                        where AdminID=? and Password=?
+                       """,
+            (admin_id, password),
+        )
+            result = self.cursor.fetchone()
+            if not result:
+                raise AuthenticationException()
+            print("Authentication successful!!")
+
+        except AuthenticationException as e:
+            print(e)
+        return result
+
 
