@@ -75,4 +75,8 @@ select sum(TotalAmount) from Reservation
                            where ReservationID=?
                            """,(resvv_id))
         return self.cursor.fetchall()
+    
+    def ViewAll(self):
+        self.cursor.execute("select * from Reservation")
+        return self.cursor.fetchall()
 

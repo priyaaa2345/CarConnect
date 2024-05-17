@@ -145,7 +145,8 @@ class MainMenu:
                 4. Update Reservation
                 5. Cancel Reservation
                 6. Calculate total cost
-                7. Back to  main menu
+                7. View ALL
+                8. Back to  main menu
                 """)
             choice= int(input("enter an option: "))
             if choice==1:
@@ -184,7 +185,11 @@ class MainMenu:
                 toto=self.reservation_service.CalculateTotalCost(resvv_id)
                 print("the total cost is : ",toto)
 
-            elif choice == 7:
+            elif choice==7:
+                all_details=self.reservation_service.ViewAll()
+                print("the details are: ", all_details)
+
+            elif choice == 8:
                 break
 
 
