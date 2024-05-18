@@ -1,5 +1,5 @@
 from util.DBConn import DBConnection
-
+from tabulate import tabulate
 class ReportGenerator(DBConnection):
     def generation_of_report(self,CustomerID):    
         self.cursor.execute("""
@@ -27,6 +27,18 @@ select Customer.CustomerID,
                             where Customer.CustomerID=?;""",(CustomerID),
          )
         
-        return self.cursor.fetchall()
+        data= self.cursor.fetchall()
+        if data:
+            headers = [
+            "Customer ID", "First Name", "Last Name", "Email", "Phone Number",
+            "Address", "Username", "Password", "Registration Date", "Vehicle ID",
+            "Start Date", "End Date", "Total Cost", "Status", "Model", "Make",
+            "Registration Number"
+        ]
+        
+        table=tabulate(data, headers=headers, tablefmt="pretty")
+        print(table)
+        return table
+
             
         

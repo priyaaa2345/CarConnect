@@ -1,31 +1,17 @@
+import pyodbc 
+from util.DBPropertyUtil import PropertyUtil
 
-class DatabaseContext:
-    def __init__(self, db_name):
-        self._db_name = db_name
-        self._connection = None
 
-    def connect(self):
-        if self._connection is None:
-            self._connection = sqlite3.connect(self._db_name)
-        return self._connection
+# print(conn_str)
+# conn=pyodbc.connect(conn_str)
 
-    def disconnect(self):
-        if self._connection is not None:
-            self._connection.close()
-            self._connection = None
+class DBConnection:
+    def __init__(self):  #for cursor instance
+        conn_str=PropertyUtil.get_property_String()
+        self.conn=pyodbc.connect(conn_str) # if obj is created there will be new connection
+        self.cursor=self.conn.cursor()
 
-    def execute_query(self, query, params=None):
-        if params is None:
-            params = []
-        cursor = self.connect().cursor()
-        cursor.execute(query, params)
-        self.connect().commit()
-        return cursor
-
-    def fetch_all(self, query, params=None):
-        cursor = self.execute_query(query, params)
-        return cursor.fetchall()
-
-    def fetch_one(self, query, params=None):
-        cursor = self.execute_query(query, params)
-        return cursor.fetchone()
+      
+    def close(self):
+        self.cursor.close()
+        self.conn.close()
