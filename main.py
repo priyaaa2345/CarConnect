@@ -1,5 +1,7 @@
-from entity import Customer, Vehicle, Reservation, Admin
+from dao.report_generator_service import ReportGenerator
+# from entity import Customer, Vehicle, Reservation, Admin
 from dao import CustomerService,VehicleService,ReservationService,AdminService
+from entity.authenctication_service import AuthenticationService
 # print(conn_str)
 # conn = pyodbc.connect(conn_str)
 # cursor = conn.cursor()
@@ -15,6 +17,8 @@ class MainMenu:
     vehicle_service=VehicleService()
     reservation_service=ReservationService()
     admin_service=AdminService()
+    report_service=ReportGenerator()
+    authent_service=AuthenticationService()
 
 
 
@@ -261,22 +265,46 @@ class MainMenu:
 
             elif choice==8:
                 break
-    
+    def Report_menu(self):
+        while True:
+            print("""
+            1. Print report
+            2. Back to main menu
+                  """)
+            choice=int(input("enter a choice: "))
+            
+            if choice==1:
+                customerId=int(input("enter the customer id to generate report: "))
+                report=self.report_service.generation_of_report(customerId)
+                print("the details are: ", report)
+
+            elif choice==2:
+                break
+
+
+    def Authentication_menu(self):
+        while True:
+            print("""
+            1. Customer
+            2. Admin
+            3. Back to main menu
+                  """)
+            choice=int(input("enter your choice: "))
+            if choice==1:
+                username=input("Enter the username: ")
+                password=input("Enter the valid password: ")
+                self.authent_service.check_customer(username,password)
+
+            elif choice==2:
+                username=input("Enter the username: ")
+                password=input("Enter the valid password: ")
+                self.authent_service.check_admin(username,password)
+            elif choice ==3:
+                break
 
 
 
 
-
-
-
-# class DatabaseContext:
-#     pass
-
-# Class AuthenticationService:
-
-
-# class ReportGenerator:
-#     pass
 def main():
     main_menu= MainMenu()
     while True:
@@ -286,7 +314,9 @@ def main():
               2. Vehicle menu
               3. Reservation menu
               4. Admin menu
-              5. Exit
+              5. Report menu
+              6. Authentication
+              7. Exit
               
               """
         )
@@ -301,7 +331,12 @@ def main():
 
         elif choice == 4:
             main_menu.Admin_menu()
-        elif choice == 5:
+        elif choice==5:
+            main_menu.Report_menu()
+
+        elif choice == 6:
+            main_menu.Authentication_menu()
+        elif choice == 7:
             break
 
 

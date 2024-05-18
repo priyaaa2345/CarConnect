@@ -6,75 +6,71 @@ class VehicleService(DBConnection):
     def GetVehicleById(self, vehi_id):
         try:
             self.cursor.execute(
-            """
-                            select * from Vehicle
-                            where VehicleID= ?
-                       """,
-            (vehi_id),
+                """
+                SELECT * FROM Vehicle WHERE VehicleID= ?
+                """,
+                (vehi_id,)
             )
-            details=self.cursor.fetchall()
-            if len(details)==0:
-                raise VehicleNotFoundException()        # whenever we raise error it goes to except blk     
-            else:          
+            details = self.cursor.fetchall()
+            if len(details) == 0:
+                raise VehicleNotFoundException("Vehicle not found with ID {}".format(vehi_id))
+            else:
                 print(details)
         except Exception as e:
-            print("oops an error..",e)
-    
+            print("Oops, an error occurred:", e)
+
     def GetAvailableVehicles(self):
         self.cursor.execute(
             """                      
-                        select * from Vehicle
-                        where Availability= 1;
-
-                       """,
+                        SELECT * FROM Vehicle
+                        WHERE Availability= 1;
+                       """
         )
         return self.cursor.fetchall()
 
-    def AddVehicle(
-        self,
-        ve_id,modl,make,year,color,Register_num,Availabi,Daily_rate
-    ):
+    def AddVehicle(self, ve_id, modl, make, year, color, Register_num, Availabi, Daily_rate):
         try:
             self.cursor.execute(
-            """
-insert into Vehicle values(?,?,?,?,?,?,?,?)
-                       """,
-            (
-                ve_id,modl,make,year,color,Register_num,Availabi,Daily_rate
-            ),
-        )
+                """
+                INSERT INTO Vehicle VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (ve_id, modl, make, year, color, Register_num, Availabi, Daily_rate)
+            )
             self.conn.commit()
-            return True 
+            return True
         except Exception as e:
-            print(f"Error adding vehicle: {e}")
-            return False 
-    def UpdateVehicle(self,dail_rate,availab,veh_id):
+            print("Error adding vehicle:", e)
+            return False
+
+    def UpdateVehicle(self, dail_rate, availab, veh_id):
         self.cursor.execute(
             """
-                       update Vehicle
-                       set DailyRate= ?,
-                       Availability=?,
-                       where VehicleID=?
-                       """,
-            (dail_rate,availab,veh_id),
+            UPDATE Vehicle SET DailyRate = ?, Availability = ? WHERE VehicleID = ?
+            """,
+            (dail_rate, availab, veh_id)
         )
         self.conn.commit()
 
     def RemoveVehicle(self, v_id):
-        self.cursor.execute(
-            """delete from Reservation 
-                       where vehicleID=?
-                       """,
-            (v_id),
-        )
-        self.cursor.execute(
-            """delete from Vehicle 
-                       where vehicleID=?
-                       """,
-            (v_id),
-        )
-        self.conn.commit()
+        try:
+            self.cursor.execute(
+                """
+                DELETE FROM Reservation WHERE VehicleID=?
+                """,
+                (v_id,)
+            )
+            self.cursor.execute(
+                """
+                DELETE FROM Vehicle WHERE VehicleID=?
+                """,
+                (v_id,)
+            )
+            self.conn.commit()
+            return True
+        except Exception as e:
+            print("Error removing vehicle:", e)
+            return False
 
     def GetAllVehicles(self):
-        self.cursor.execute("select * from Vehicle")
+        self.cursor.execute("SELECT * FROM Vehicle")
         return self.cursor.fetchall()

@@ -41,18 +41,6 @@ class ReservationService(DBConnection):
             return result  # Indicate success
 
 
-    # def CreateReservation(self,re_id,cu_id,ve_id,start_date,end_date,tot_cost,status):
-    #     try:  #try again
-    #         self.cursor.execute("""insert into Reservation values(?,?,?,?,?,?,?)
-    #                    """,(re_id,cu_id,ve_id,start_date,end_date,tot_cost,status))
-    #         # self.conn.commit()
-    #         result = self.cursor.fetchone() #execute("select ReservationId from Reservation where ReservationID=?",(re_id))
-    #         if not result:
-    #             raise ReservationException()
-    #     except ReservationException as e:
-    #         print(e)
-    #     return result
-
     def UpdateReservation(self,cust_id,veh_id,stats):
         self.cursor.execute("""
 update Reservation

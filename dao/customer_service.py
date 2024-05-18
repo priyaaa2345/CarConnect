@@ -24,13 +24,15 @@ class CustomerService(DBConnection):
 
     def GetCustomerById(self, custom_id):
         self.cursor.execute(
-            """
-                     select * from customer
-                     where customerid = ?
-                       """,
-            (custom_id),
-        )
-        return self.cursor.fetchall()
+        """
+                 select * from customer
+                 where customerid = ?
+                   """,
+            (custom_id,),
+    )
+        result = self.cursor.fetchone()  # Fetch only one record
+        return result
+
 
     def GetCustomerByUsername(self, custom_name):
         self.cursor.execute(
@@ -45,8 +47,8 @@ class CustomerService(DBConnection):
     def RegisterCustomer(
         self, cus_id, Firs_name, las_name, mail, Phon, addr, Usernam, passwo, reg_date
     ):
-        # if not self.is_valid_phone(Phon):
-        #     raise InvalidInputException()
+        if not self.is_valid_phone(Phon):
+            raise InvalidInputException()
     
 
         self.cursor.execute(
@@ -60,18 +62,19 @@ class CustomerService(DBConnection):
         self.conn.commit()
     def is_valid_phone(self, phone):
         return len(str(phone)) == 10 and str(phone).isdigit()
-    def UpdateCustomer(self, phoon, addre, emai, cust_id):  # error
+    def UpdateCustomer(self, phoon, addre, emai, cust_id): 
         self.cursor.execute(
-            """
-                       update customer set PhoneNumber=?,
-                       Address= ?,
-                       Email=?,
-                       where CustomerID = ?
-
-                       """,
-            (phoon, addre, emai, cust_id),
-        )
+        """
+        UPDATE customer 
+        SET PhoneNumber = ?,
+            Address = ?,
+            Email = ?
+        WHERE CustomerID = ?
+        """,
+        (phoon, addre, emai, cust_id),
+    )
         self.conn.commit()
+
 
     def DeleteCustomer(self, custu_id):
         self.cursor.execute(
@@ -91,7 +94,3 @@ select* from customer
         )
         result = self.cursor.fetchall()
         return result
-    
-
-
-    
