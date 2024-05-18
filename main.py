@@ -67,7 +67,6 @@ class MainMenu:
                 self.customer_service.RegisterCustomer(
                     cus_id, Firs_name, las_name, mail, Phon, addr, Usernam, passwo, reg_date
                 )
-                print("Customer Registration DONE!! ")
 
             elif choice == 5:
                 phoon = int(input("enter your phone num to update : "))
@@ -163,15 +162,17 @@ class MainMenu:
                 print("the details area: ",details)
             elif choice==3:
                 re_id=int(input("Enter the reservation id: "))
-                cu_id=int(input("Enter the customer id : "))
-                ve_id=int(input("Enter the vehicle id pls: "))
-                start_date=input("give the starting date of reservation: ")
-                end_date=input("Pls enter the end date of reservation: ")
-                tot_cost=int(input("Enter the total cost for reservation: "))
-                status=input("Enter the status(completed/pending): ")
-                self.reservation_service.create_reservation(re_id,cu_id,ve_id,start_date,end_date,tot_cost,status)
-                print("reservation done")
-
+                good_to_go=self.reservation_service.Check_For_Reservation(re_id)
+                if good_to_go:
+                    cu_id=int(input("Enter the customer id : "))
+                    ve_id=int(input("Enter the vehicle id pls: "))
+                    start_date=input("give the starting date of reservation: ")
+                    end_date=input("Pls enter the end date of reservation: ")
+                    tot_cost=int(input("Enter the total cost for reservation: "))
+                    status=input("Enter the status(completed/pending): ")
+                    self.reservation_service.create_reservation(re_id,cu_id,ve_id,start_date,end_date,tot_cost,status)
+                    print("reservation done")
+               
             elif choice==4:
                 cust_id=int(input("Enter the customer id : "))
                 veh_id=int(input("Enter the vehicle id pls: "))

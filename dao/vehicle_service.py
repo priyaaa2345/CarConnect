@@ -13,7 +13,7 @@ class VehicleService(DBConnection):
             )
             details = self.cursor.fetchall()
             if len(details) == 0:
-                raise VehicleNotFoundException("Vehicle not found with ID {}".format(vehi_id))
+                raise VehicleNotFoundException()
             else:
                 print(details)
         except Exception as e:

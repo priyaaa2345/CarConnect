@@ -43,15 +43,17 @@ class CustomerService(DBConnection):
             (custom_name), 
         )
         return self.cursor.fetchall()
-
+        
     def RegisterCustomer(
         self, cus_id, Firs_name, las_name, mail, Phon, addr, Usernam, passwo, reg_date
     ):
-        if not self.is_valid_phone(Phon):
-            raise InvalidInputException()
-    
-
-        self.cursor.execute(
+        try:
+            if not self.is_valid_phone(Phon):
+                raise InvalidInputException()
+                
+        except Exception as e:
+            print(e)
+            self.cursor.execute(
             """
                             insert into Customer values(
                             ?,?,?,?,?,?,?,?,?                       
@@ -73,6 +75,7 @@ class CustomerService(DBConnection):
         """,
         (phoon, addre, emai, cust_id),
     )
+        print("Customer Registration DONE!! ")
         self.conn.commit()
 
 

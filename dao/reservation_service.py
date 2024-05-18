@@ -25,20 +25,30 @@ class ReservationService(DBConnection):
                        
                        """,(cus_id))
         return self.cursor.fetchall()
-    def create_reservation(self, re_id, cu_id, ve_id, start_date, end_date, tot_cost, status):
+    
+    def Check_For_Reservation(self,re_id):
         try:
-            self.cursor.execute("""insert into Reservation values(?,?,?,?,?,?,?)""",
-                                (re_id, cu_id, ve_id, start_date, end_date, tot_cost, status))
             self.cursor.execute("select ReservationId from Reservation where ReservationID=?", (re_id,))
             result = self.cursor.fetchone()  # Fetch one row from the query result
             if result:  # If result is not None
                 raise ReservationException()
-        except ReservationException as e:
+        except Exception as e:
             print(e)
-            # Handle the exception as needed
-            return None  # Indicate failure
         else:
-            return result  # Indicate success
+            return True
+
+    def create_reservation(self, re_id, cu_id, ve_id, start_date, end_date, tot_cost, status):
+    
+            self.cursor.execute("""insert into Reservation values(?,?,?,?,?,?,?)""",
+                                (re_id, cu_id, ve_id, start_date, end_date, tot_cost, status))
+            self.conn.commit()
+            
+        # except ReservationException as e:
+        #     print(e)
+        #     # Handle the exception as needed
+        #     return None  # Indicate failure
+        # else:
+        #     return result  # Indicate success
 
 
     def UpdateReservation(self,cust_id,veh_id,stats):
