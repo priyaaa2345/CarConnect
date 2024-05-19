@@ -51,8 +51,7 @@ class CustomerService(DBConnection):
             if not self.is_valid_phone(Phon):
                 raise InvalidInputException()
                 
-        except Exception as e:
-            print(e)
+        
             self.cursor.execute(
             """
                             insert into Customer values(
@@ -61,7 +60,11 @@ class CustomerService(DBConnection):
                        """,
             (cus_id, Firs_name, las_name, mail, Phon, addr, Usernam, passwo, reg_date),
         )
-        self.conn.commit()
+            self.conn.commit()
+            print("registered")
+        except Exception as e:
+            print(e)
+        
     def is_valid_phone(self, phone):
         return len(str(phone)) == 10 and str(phone).isdigit()
     def UpdateCustomer(self, phoon, addre, emai, cust_id): 
