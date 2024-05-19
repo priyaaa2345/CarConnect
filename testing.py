@@ -5,9 +5,9 @@ from entity.customer import Customer
 from entity.vehicle import Vehicle
 from exception.authentication_exception import AuthenticationException
 
-class TestCustomerService(unittest.TestCase):
-    def setUp(self):
-        self.customer_service = CustomerService()
+# class TestCustomerService(unittest.TestCase):
+#     def setUp(self):
+#         self.customer_service = CustomerService()
 # # 1)
     # def test_customer_authentication_with_invalid_credentials(self):
     #     # Arrange
@@ -80,67 +80,64 @@ class TestCustomerService(unittest.TestCase):
 
 #         self.customer_service.DeleteCustomer(16)
 
-
+#3) 2 times op received
 
 class TestVehicleService(unittest.TestCase):
-    def setUp(self):
-        self.vehicle_service = VehicleService()
-    # def test_add_vehicle(self):
-    #     result = self.vehicle_service.AddVehicle(
-    #         111,
-    #         "Phantom",
-    #         "Rolls Royce",
-    #         2024,
-    #         "Orange",
-    #         3244,
-    #         1,
-    #         14000000
-    #     )
-    #     self.assertFalse(result)
 
-    #     # Retrieve the added vehicle
-    #     retrieved_vehicle = self.vehicle_service.GetVehicleById(111)
-    #     # self.assertIsNotNone(retrieved_vehicle)
+    # def setUp(self):
+    #     self.vehicle_service = VehicleService()
+    #     # Add a vehicle once for all tests
+    #     self.vehicle_service.AddVehicle(112, "Series", "Audi", 2018, "blue", 12323, 1, 5000)
+    #     print("Vehicle 112 added successfully.")
 
-    #     # Check the details of the added vehicle
-    #     self.assertEqual(retrieved_vehicle[0], 111)  # VehicleID
-    #     self.assertEqual(retrieved_vehicle[1], "Phantom")  # Model
-    #     self.assertEqual(retrieved_vehicle[2], "Rolls Royce")  # Make
-    #     self.assertEqual(retrieved_vehicle[3], 2024)  # Year
-    #     self.assertEqual(retrieved_vehicle[4], "Orange")  # Color
-    #     self.assertEqual(retrieved_vehicle[5], 3244)  # RegistrationNumber
-    #     self.assertEqual(retrieved_vehicle[6], )  # Availability
-    #     self.assertEqual(retrieved_vehicle[7], 14000000)  # DailyRate
+    # def tearDown(self):
+    #     # Remove the vehicle once after all tests
+    #     self.vehicle_service.RemoveVehicle(112)
+    #     print("Vehicle 112 removed successfully.")
 
-    def test_update_vehicle(self):
-    #     # Add a new vehicle first
-    #     self.vehicle_service.AddVehicle(
-    #         111,
-    #         "Phantom",
-    #         "Rolls Royce",
-    #         2024,
-    #         "Orange",
-    #         3244,
-    #         0,
-    #         14000000
-    #     )
+    # def test_update_vehicle(self):
+    #     print("Running test_update_vehicle")
 
-    #     # Update only DailyRate and Availability
-        self.vehicle_service.UpdateVehicle(2400000,1,111)
+    #     # Act: Update the existing vehicle's availability and daily rate
+    #     update_success = self.vehicle_service.UpdateVehicle(6000, 0, 112)
+    #     print("Vehicle 112 updated successfully.")
 
-        # Retrieve the updated vehicle
-        retrieved_updated_vehicle = self.vehicle_service.GetVehicleById(111)
-        # self.assertIsNotNone(retrieved_updated_vehicle)
+    #     # Retrieve updated vehicle details
+    #     retrieved_vehicle = self.vehicle_service.GetVehicleById(112)
 
-        self.assertEqual(retrieved_updated_vehicle[6], 1)  # Availability
-        self.assertEqual(retrieved_updated_vehicle[7], 2400000)  # DailyRate
+    #     # Assert: Check the updated values
+    #     self.assertIsNotNone(retrieved_vehicle, "Vehicle not found in database after updating.")
+    #     self.assertEqual(retrieved_vehicle[6], 0)  # Availability
+    #     self.assertEqual(retrieved_vehicle[7], 6000)  # DailyRate
 
-        # Assert the other fields remain unchanged
-        # self.assertEqual(retrieved_updated_vehicle[1], "Phantom")  # Model
-        # self.assertEqual(retrieved_updated_vehicle[2], "Rolls Royce")  # Make
-        # self.assertEqual(retrieved_updated_vehicle[3], 2024)  # Year
-        # self.assertEqual(retrieved_updated_vehicle[4], "Orange")  # Color
-        # self.assertEqual(retrieved_updated_vehicle[5], 3244)  # RegistrationNumber
+
+#op is fine::
+#3) 4)
+        def setUp(self):
+            self.vehicle_service = VehicleService()
+            # Add a vehicle once for all tests
+            add_success = self.vehicle_service.AddVehicle(112, "Series", "Audi", 2018, "blue", 12323, 1, 5000)
+            self.assertTrue(add_success, "Failed to add vehicle in setUp")
+
+        def tearDown(self):
+            # Remove the vehicle once after all tests
+            remove_success = self.vehicle_service.RemoveVehicle(112)
+            self.assertTrue(remove_success, "Failed to remove vehicle in tearDown")
+
+        def test_update_vehicle(self):
+            print("Running test_update_vehicle")
+
+            # Act: Update the existing vehicle's availability and daily rate
+            update_success = self.vehicle_service.UpdateVehicle(6000, 0, 112)
+            self.assertTrue(update_success, "Failed to update vehicle.")
+
+            # Retrieve updated vehicle details
+            retrieved_vehicle = self.vehicle_service.GetVehicleById(112)
+
+            # Assert: Check the updated values
+            self.assertIsNotNone(retrieved_vehicle, "Vehicle not found in database after updating.")
+            self.assertEqual(retrieved_vehicle[6], 0)  # Availability
+            self.assertEqual(retrieved_vehicle[7], 6000)  # DailyRate
 
 
 
@@ -155,108 +152,6 @@ class TestVehicleService(unittest.TestCase):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#     def test_add_new_vehicle(self):
-#         # Arrange: Create a new vehicle object
-#         new_vehicle = Vehicle(
-#             VehicleID=109,  
-#             Model="Phantom",
-#             Make="Rolls Royce",
-#             Year=2024,
-#             Color="orange",
-#             RegistrationNumber=324,
-#             Availability=0,
-#             DailyRate=14000000
-#         )
-        
-#         # Act: Add the new vehicle
-#         added_successfully = self.vehicle_service.AddVehicle(
-#             new_vehicle.get_vehicle_id(),          
-#             new_vehicle.get_model(),               
-#             new_vehicle.get_make(),                
-#             new_vehicle.get_year(),                 
-#             new_vehicle.get_color(),                
-#             new_vehicle.get_registrationnumber(),   
-#             new_vehicle.get_availability(),        
-#             new_vehicle.get_dailyrate()            
-#         )
-
-#         # Assert: Check if the vehicle was added successfully
-#         self.assertTrue(added_successfully, "Failed to add new vehicle.")
-        
-#         # Check if the vehicle exists in the database
-#         retrieved_vehicle = self.vehicle_service.GetVehicleById(new_vehicle.get_vehicle_id())
-#         self.assertIsNotNone(retrieved_vehicle, "Vehicle not found in database after adding.")
-
-#     def tearDown(self):
-#         # Remove the added vehicle
-#         self.vehicle_service.RemoveVehicle(109)  
-
-
-
-
-
-# # 4)
-#     def test_update_vehicle(self):
-#         self.vehicle_service.AddVehicle(109,
-#             "Phantom",
-#             "Rolls Royce",
-#             2024,
-#             "orange",
-#             324,
-#             0,
-#             14000000)
-#         retrivedVehicle = self.vehicle_service.GetVehicleById(109)
-#         updateVehicle = Vehicle(VehicleID=109,
-#             Model="Phantom",
-#             Make="Rolls Royce",
-#             Year=2024,
-#             Color="Orange",
-#             RegistrationNumber=324,
-#             Availability=1,
-#             DailyRate=2400000)
-#         self.vehicle_service.UpdateVehicle(updateVehicle)
-
-#         # Retrieve the updated vehicle
-#         retrieved_updated_vehicle = self.vehicle_service.GetVehicleById(109)
-
-#         # Assert the fields have been updated
-#         self.assertEqual(retrieved_updated_vehicle.Availability, 1)
-#         self.assertEqual(retrieved_updated_vehicle.DailyRate, 2400000)
-
-#         # Assert the other fields remain unchanged
-#         self.assertEqual(retrieved_updated_vehicle.Model, "Phantom")
-#         self.assertEqual(retrieved_updated_vehicle.Make, "Rolls Royce")
-#         self.assertEqual(retrieved_updated_vehicle.Year, 2024)
-#         self.assertEqual(retrieved_updated_vehicle.Color, "Orange")
-#         self.assertEqual(retrieved_updated_vehicle.RegistrationNumber, 324)
-#         # self.vehicle_service.UpdateVehicle(updateVehicle,retrivedVehicle[0])
-#         # retrivedUpdatedVehicle = self.vehicle_service.GetVehicleById(109)
-#         # self.assertEqual(retrivedUpdatedVehicle[4],"Brown")
 
 
 
