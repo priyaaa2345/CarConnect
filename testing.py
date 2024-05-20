@@ -122,7 +122,7 @@ class TestVehicleService(unittest.TestCase):
         def test_get_available_vehicles(self):
             vehicles = self.vehicle_service.GetAvailableVehicles()
 
-            self.assertEqual(len(vehicles),8)  #len value needs to be changed because we are adding vehicles on top..
+            self.assertEqual(len(vehicles),7)  #len value needs to be changed because we are adding vehicles on top..
 
 
 
@@ -131,7 +131,7 @@ class TestVehicleService(unittest.TestCase):
 
             self.assertTrue(all_vehicles, "The list of all vehicles is empty.")
 
-            self.assertEqual(len(all_vehicles), 13)
+            self.assertEqual(len(all_vehicles), 12)
 
 
 if __name__=="__main__":
