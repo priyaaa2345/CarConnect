@@ -33,7 +33,7 @@ class TestCustomerService(unittest.TestCase):
             222222,"Ras st,chennai","summa@gmail.com",16   
         )
 
-        # # Assert: Retrieving the data
+        # # Assert: Retrieving the data to check if itsi true...
         updated_customer = self.customer_service.GetCustomerById(16)
         if updated_customer:
             self.assertEqual(updated_customer[5], "Ras st,chennai")
@@ -50,65 +50,65 @@ class TestCustomerService(unittest.TestCase):
 
 
 
-#3) Test1::
+#3) 4)Test1::
 
 class TestVehicleService(unittest.TestCase):
 
-    def setUp(self):
-        self.vehicle_service = VehicleService()
-    # def test_add_vehice(self):
-        self.vehicle_service.AddVehicle(112, "Series", "Audi", 2018, "blue", 12323, 1, 5000)
-        print("Vehicle 112 added successfully.")
+    # def setUp(self):
+    #     self.vehicle_service = VehicleService()
 
-    def tearDown(self):
-        # Remove the vehicle once after all tests
-        self.vehicle_service.RemoveVehicle(112)
-        print("Vehicle 112 removed successfully.")
+    # # def test_add_vehice(self):
+    #     added_vehicle=self.vehicle_service.AddVehicle(113, "Series", "Audi", 2018, "blue", 33, 1, 5000)
+    #     print("Vehicle 113 added successfully.")
+    #     self.assertEqual(added_vehicle[1], "Series")  # Availability
+    #     self.assertEqual(added_vehicle[2], "Audi") 
 
-    def test_update_vehicle(self):
-        print("Running test_update_vehicle")
+    # def tearDown(self):
+    #     self.vehicle_service.RemoveVehicle(113)
+    #     print("Vehicle 112 removed successfully.")
 
-        # Act: Update the existing vehicle's availability and daily rate
-        self.vehicle_service.UpdateVehicle(6000, 0, 112)
-        print("Vehicle 112 updated successfully.")
+    # def test_update_vehicle(self):
+    #     print("Running test_update_vehicle")
 
-        # Retrieve updated vehicle details
-        retrieved_vehicle = self.vehicle_service.GetVehicleById(112)
+    #     self.vehicle_service.UpdateVehicle(6000, 0, 113)
+    #     print("Vehicle 112 updated successfully.")
 
-        # Assert: Check the updated values
-        self.assertIsNotNone(retrieved_vehicle, "Vehicle not found in database after updating.")
-        self.assertEqual(retrieved_vehicle[6], 0)  # Availability
-        self.assertEqual(retrieved_vehicle[7], 6000)  # DailyRate
+    #     retrieved_vehicle = self.vehicle_service.GetVehicleById(113)
+
+    #     self.assertIsNotNone(retrieved_vehicle, "Vehicle not found in database after updating.")
+    #     self.assertEqual(retrieved_vehicle[6], 0)  # Availability
+    #     self.assertEqual(retrieved_vehicle[7], 6000)  # DailyRate
+        
+    # def tearDown(self):
+    #     self.vehicle_service.RemoveVehicle(113)
 
 
-#op is fine::
+#op is fine but not exactt..::
 #3) 4)
-        # def setUp(self):
-        #     self.vehicle_service = VehicleService()
-        #     # Add a vehicle once for all tests
-        #     print("Adding here..")
-        #     add_success = self.vehicle_service.AddVehicle(112, "Series", "Audi", 2018, "blue", 12323, 1, 5000)
-        #     self.assertTrue(add_success, "Added")
+        def setUp(self):
+            self.vehicle_service = VehicleService()
 
-        # def tearDown(self):
-        #     # Remove the vehicle once after all tests
-        #     remove_success = self.vehicle_service.RemoveVehicle(112)
-        #     self.assertTrue(remove_success, "Failed to remove vehicle in tearDown")
+            print("Adding a new vehicle🚗")
+            add_success = self.vehicle_service.AddVehicle(112, "Series", "Audi", 2018, "blue", 12323, 1, 5000)
+            self.assertTrue(add_success, "Added")
 
-        # def test_update_vehicle(self):
-        #     print("Running test_update_vehicle")
+        def tearDown(self):
 
-        #     # Act: Update the existing vehicle's availability and daily rate
-        #     update_success = self.vehicle_service.UpdateVehicle(6000, 0, 112)
-        #     self.assertTrue(update_success, "Failed to update vehicle.")
+            remove_success = self.vehicle_service.RemoveVehicle(112)
+            self.assertTrue(remove_success, "Failed to remove vehicle")
 
-        #     # Retrieve updated vehicle details
-        #     retrieved_vehicle = self.vehicle_service.GetVehicleById(112)
+        def test_update_vehicle(self):
+            print("Running test_update_vehicle")
 
-        #     # Assert: Check the updated values
-        #     self.assertIsNotNone(retrieved_vehicle, "Vehicle not found in database after updating.")
-        #     self.assertEqual(retrieved_vehicle[6], 0)  # Availability
-        #     self.assertEqual(retrieved_vehicle[7], 6000)  # DailyRate
+            update_success = self.vehicle_service.UpdateVehicle(6000, 0, 112)
+            self.assertTrue(update_success, "Failed to update vehicle.")
+
+            retrieved_vehicle = self.vehicle_service.GetVehicleById(112)
+
+            # Assert: 
+            self.assertIsNotNone(retrieved_vehicle, "Vehicle not found in database after updating.")
+            self.assertEqual(retrieved_vehicle[6], 0)  # Availability
+            self.assertEqual(retrieved_vehicle[7], 6000)  # DailyRate
 
 
 
@@ -117,32 +117,21 @@ class TestVehicleService(unittest.TestCase):
 
 
 
+#5) 6)
+
+        def test_get_available_vehicles(self):
+            vehicles = self.vehicle_service.GetAvailableVehicles()
+
+            self.assertEqual(len(vehicles),8)  #len value needs to be changed because we are adding vehicles on top..
 
 
 
+        def test_get_all_vehicles(self):
+            all_vehicles = self.vehicle_service.GetAllVehicles()
 
+            self.assertTrue(all_vehicles, "The list of all vehicles is empty.")
 
-
-
-
-
-
-
-
-
-    def test_get_available_vehicles(self):
-        vehicles = self.vehicle_service.GetAvailableVehicles()
-
-        self.assertEqual(len(vehicles),8)  #len value needs to be changed because we are adding vehicles on top..
-
-
-
-    def test_get_all_vehicles(self):
-        all_vehicles = self.vehicle_service.GetAllVehicles()
-
-        self.assertTrue(all_vehicles, "The list of all vehicles is empty.")
-
-        self.assertEqual(len(all_vehicles), 13)
+            self.assertEqual(len(all_vehicles), 13)
 
 
 if __name__=="__main__":

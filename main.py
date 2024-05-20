@@ -13,6 +13,7 @@ print("Welcome to CarConnect 🚗")
 
 
 class MainMenu:
+    #instance for the respective classes
     customer_service = CustomerService()
     vehicle_service=VehicleService()
     reservation_service=ReservationService()

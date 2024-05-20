@@ -19,8 +19,7 @@ class ReportGenerator(Customer,Vehicle,Reservation):
         TotalCost,
         Status,
          Model, Make,
-         RegistrationNumber,
-         report_end):
+         RegistrationNumber):
         
         # Caling const of base clas
 
@@ -39,11 +38,9 @@ class ReportGenerator(Customer,Vehicle,Reservation):
         TotalCost,
         Status,
          Model, Make,
-         RegistrationNumber,
-         report_end
+         RegistrationNumber
+         
          )
 
-        self.report_end = report_end
-
-
+        
 

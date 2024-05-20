@@ -11,14 +11,14 @@ class Customer:
         Password,
         RegistrationDate,
     ):
-        self.CustomerID = CustomerID 
+        self.__CustomerID = CustomerID 
         self.FirstName = FirstName
         self.LastName = LastName
-        self.Email = Email
+        self.__Email = Email
         self.PhoneNumber = PhoneNumber
         self.Address = Address
-        self.Username = Username
-        self.Password = Password
+        self.__Username = Username
+        self.__Password = Password
         self.RegistrationDate = RegistrationDate
 
     def get_customer_id(self):
